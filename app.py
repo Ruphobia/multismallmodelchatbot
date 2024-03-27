@@ -1,7 +1,5 @@
 #!/usr/bin/python3
 from bokeh.server.server import Server
-from bokeh.models import ColumnDataSource
-from bokeh.plotting import figure
 from bokeh.layouts import row
 import io
 from panel.pane import PNG
@@ -15,6 +13,7 @@ import time
 from intent import IntentClassifier
 from helpers import save_Prompts 
 from sysmon import get_cpu_temperatures, get_gpu_temperatures, get_cpu_usage, get_gpu_usage, get_system_ram, get_gpu_ram_usage   
+from agents import output_stream, start_agent
 
 pn.extension()
 intentclassifier = IntentClassifier()
@@ -48,9 +47,7 @@ pn.config.raw_css.append(dark_theme_css)
 
 # Adjustments to TextAreaInput height and output_stream max-height might be needed
 input_box = pn.widgets.TextAreaInput(placeholder="Type here...", sizing_mode='stretch_width', css_classes=['bk-text-area'], height=100, max_height=100)
-output_stream = pn.pane.Markdown("",
-                                     sizing_mode='stretch_both',
-                                     styles={'overflow-y': 'auto', 'height': '100%', 'max-height': 'calc(100vh - 100px)', 'background-color': '#34495e', 'color': '#ecf0f1'})
+
 chatbot_panel = None
 cpu_usage_pane = None
 
@@ -60,6 +57,7 @@ def send_response(event=None):
     user_message = input_box.value.lower().strip()
     save_Prompts(user_message)
     promptclass = intentclassifier.classify_prompt(user_message)
+    start_agent(user_message, promptclass)
 
     output_stream.object += f"{promptclass}\n"
     input_box.value = '' 
