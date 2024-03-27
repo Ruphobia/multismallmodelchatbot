@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 import sys
 from langchain.memory import ConversationBufferMemory
-from langchain.llms import LlamaCpp
+from langchain_community.llms import LlamaCpp
 from langchain.chains import ConversationChain
 from langchain.prompts.prompt import PromptTemplate
 from langchain.callbacks.manager import CallbackManager
@@ -13,8 +13,13 @@ from typing import TYPE_CHECKING, Any, Dict, List
 from multiprocessing import Process, Queue
 import time
 
+input_queue = None
+output_queue = None
+process = None
+
 class MyCallBack(BaseCallbackHandler):
-    """Callback handler for streaming. Only works with LLMs that support streaming."""
+    def __init__(self):
+        self.output_queue = output_queue
 
     def on_llm_start(
         self, serialized: Dict[str, Any], prompts: List[str], **kwargs: Any
@@ -31,8 +36,8 @@ class MyCallBack(BaseCallbackHandler):
 
     def on_llm_new_token(self, token: str, **kwargs: Any) -> None:
         """Run on new LLM token. Only available when streaming is enabled."""
-        sys.stdout.write(token)
-        sys.stdout.flush()
+        output_queue.put(token)
+        print(token)
 
     def on_llm_end(self, response: LLMResult, **kwargs: Any) -> None:
         """Run when LLM ends running."""
@@ -70,23 +75,23 @@ class MyCallBack(BaseCallbackHandler):
         """Run on arbitrary text."""
 
     def on_agent_finish(self, finish: AgentFinish, **kwargs: Any) -> None:
-        """Run on agent end."""
+        print("Agent Finished")
 
 def load_llm(temperature):
     callback_manager = CallbackManager([MyCallBack()])
-    n_batch = 2048 
-    
+     
     llm = LlamaCpp(
-    model_path="deepseek-coder-7b-instruct-v1.5.q8_0.gguf",
+    model_path="models/deepseek/deepseek-coder-7b-instruct-v1.5.q8_0.gguf",
     temperature=temperature,
-    n_batch=n_batch,
+    # n_batch=2048,
     n_gpu_layers=-1,
     callback_manager=callback_manager,
     streaming=True,
     n_ctx=4096,
-    f16_kv=True,  
+    # f16_kv=True,  
     verbose=False,
-    repeat_penalty=1,
+    # repeat_penalty=1,
+    max_tokens=4096
     )
 
     return llm
@@ -107,7 +112,9 @@ def get_conversation_chain(llm, conversation_memory):
 
     return conversation
 
-def llmprocess(input_queue):
+def llmprocess(input_queue, oqueue):
+    global output_queue
+    output_queue = oqueue
     """
     Process user questions from an input queue.
 
@@ -125,21 +132,12 @@ def llmprocess(input_queue):
         Conversation_chain = get_conversation_chain(llm, conversation_memory)
         Conversation_chain.predict(input=user_question)
         
+def startAgent(output_queue):
+    global input_queue
+    global process
 
-def main():
     input_queue = Queue()
-    process = Process(target=llmprocess, args=(input_queue,))
+    process = Process(target=llmprocess, args=(input_queue,output_queue))
     process.start()
 
-    while True:
-        user_input = input("\nuser: ")
-        if user_input.strip().lower() == "quit":
-            input_queue.put("quit") 
-            process.join() 
-            break
-        input_queue.put(user_input)  
 
-if __name__ == "__main__":
-    main()
-    while(True):
-        time.sleep(1)

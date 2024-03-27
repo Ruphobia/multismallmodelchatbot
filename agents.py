@@ -1,15 +1,25 @@
-import panel as pn
 
 
-global_agents = {}
+
+# Application imports
+import agent_deepseek
+
 global_selected_agent = None
+global_agent_object = None
 
-output_stream = pn.pane.Markdown("",
-                                     sizing_mode='stretch_both',
-                                     styles={'overflow-y': 'auto', 'height': '100%', 'max-height': 'calc(100vh - 100px)', 'background-color': '#34495e', 'color': '#ecf0f1'})
+def start_agent(prompt, agent_task, output_queue):
+    global global_selected_agent
+    global global_agent_object
+
+    if (global_selected_agent != agent_task):
+        if (global_selected_agent != None):
+            print("Shut down current agent")
 
 
-def start_agent(prompt, agent_task):
-    global output_stream
-    output_stream.object += f"{prompt}, {agent_task}"
+        if (agent_task == "code"):
+            agent_deepseek.startAgent(output_queue)
+            global_agent_object = agent_deepseek
+
+    global_agent_object.input_queue.put(prompt) 
+
 
