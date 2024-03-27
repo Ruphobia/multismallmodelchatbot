@@ -1,0 +1,89 @@
+{
+    "intents": [
+      {
+        "tag": "image",
+        "patterns": [
+          "Create image of sunset over mountains",
+          "Generate picture of futuristic cityscape",
+          "Produce illustration of cat by window in rain",
+          "Need image depicting knight vs dragon",
+          "Visualize serene beach scene with palm trees",
+          "Craft image of robot gardening",
+          "Draw scene from bustling medieval market",
+          "Design artwork with spaceship landing on Mars",
+          "Picture snowy village at night with northern lights",
+          "Imagine fantasy forest with magical creatures",
+          "Create visual of underwater city",
+          "Show image of chef in modern kitchen",
+          "Construct picture of pirate ship in storm",
+          "Render peaceful countryside landscape with barn",
+          "Want image of detective in noir setting",
+          "Envision high-speed train through countryside",
+          "Make picture of wizard's library full of ancient books"
+        ]
+      },
+      {
+        "tag": "question",
+        "patterns": [
+          "What's the weather like today?",
+          "what is your name",
+          "What is the weather like today",
+          "Can you recommend a good restaurant nearby?",
+          "How do I get to the nearest airport",
+          "What are the symptoms of the flu",
+          "Where can I find the latest movie showtimes",
+          "How can I lose weight effectively",
+          "What are the best tourist attractions in Paris",
+          "How do I make a chocolate cake from scratch",
+          "What's the best way to save money for retirement",
+          "How can I improve my sleep quality",
+          "What are the side effects of this medication",
+          "How do I change a car tire",
+          "What are the top-rated schools in my area",
+          "How can I train my dog to sit",
+          "What are the current fashion trends",
+          "Can you provide the recipe for a margarita",
+          "How do I start a small business",
+          "What exercises are effective for a full-body workout",
+          "How can I reduce my carbon footprint at home",
+          "What's the best way to learn a new language quickly"
+        ]
+      },
+      {
+        "tag": "code",
+        "patterns": [
+          "Write a function to reverse a string.",
+          "write a hello world program",
+          "write a python program",
+          "Create a function to calculate factorial of a number",
+          "Develop a method to check if string is palindrome",
+          "Implement routine to merge two sorted lists into one",
+          "Construct function to convert Celsius to Fahrenheit",
+          "Formulate method that returns nth Fibonacci number",
+          "Design program to find largest element in an array",
+          "Establish function for calculating area of circle",
+          "Generate function that sorts list of names alphabetically",
+          "Build procedure to count number of vowels in string",
+          "Compose function to detect whether number is prime",
+          "Devise method for reversing an array in place",
+          "Outline function to compute sum of two matrices",
+          "Frame function that filters even numbers from list",
+          "Set up function to convert binary numbers to decimal",
+          "Arrange method to find the minimum value in an array"
+        ]
+      },
+      {
+        "tag": "[clear]",
+        "patterns": [
+          "clear",
+          "memory clear",
+          "context clear",
+          "clear your memory",
+          "clear your mind",
+          "delete history",
+          "start over"
+        ]
+      }
+    ]
+  }
+  
