@@ -37,7 +37,6 @@ class MyCallBack(BaseCallbackHandler):
     def on_llm_new_token(self, token: str, **kwargs: Any) -> None:
         """Run on new LLM token. Only available when streaming is enabled."""
         output_queue.put(token)
-        print(token)
 
     def on_llm_end(self, response: LLMResult, **kwargs: Any) -> None:
         """Run when LLM ends running."""

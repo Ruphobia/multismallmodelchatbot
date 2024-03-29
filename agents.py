@@ -14,7 +14,7 @@ def start_agent(prompt, agent_task, output_queue):
     if (global_selected_agent != agent_task):
         if (global_selected_agent != None):
             print("Shut down current agent")
-
+            del global_agent_object
 
         if (agent_task == "code"):
             agent_deepseek.startAgent(output_queue)
